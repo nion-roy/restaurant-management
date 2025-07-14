@@ -67,6 +67,8 @@ const handleLogin = async () => {
         })
         // Save token to localStorage or cookies
         localStorage.setItem('token', response.data.data.token)
+        // Show success toast
+        toast.success('Login successful!')
         // Redirect to dashboard without reload
         router.push('/dashboard')
     } catch (err) {

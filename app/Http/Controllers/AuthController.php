@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Services\AuthService;
 use App\Repositories\UserRepository;
 use App\Traits\ResponseMessage;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
@@ -34,5 +35,11 @@ class AuthController extends Controller
         } else {
             return $this->error($result, 401);
         }
+    }
+
+    public function logout()
+    {
+        JWTAuth::invalidate(JWTAuth::getToken());
+        return response()->json(['message' => 'Successfully logged out']);
     }
 } 

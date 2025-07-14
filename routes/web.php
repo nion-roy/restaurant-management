@@ -6,7 +6,10 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 
 Route::post('/api/login', [AuthController::class, 'login']);
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::middleware(['jwt.auth'])->group(function () {
+    // API routes only, e.g.:
+    Route::post('/logout', [AuthController::class, 'logout']);
+});
 
 Route::get('/{any}', function () {
     return view('app');
