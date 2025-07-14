@@ -1,13 +1,33 @@
-import { createApp } from 'vue';
-import Login from './components/Login.vue';
-import Toast, { POSITION } from 'vue-toastification';
-import 'vue-toastification/dist/index.css';
+import { createApp } from 'vue'
+import App from './App.vue'
+import Login from './components/Login.vue'
+// Import Dashboard component (create a placeholder if not exists)
+import Dashboard from './components/Dashboard.vue'
+import { createRouter, createWebHistory } from 'vue-router'
+import { isLoading } from './loading'
 
-const app = createApp(Login);
+const routes = [
+  { path: '/login', component: Login },
+  { path: '/dashboard', component: Dashboard },
+  { path: '/', redirect: '/login' }
+]
 
-app.use(Toast, {
-  position: POSITION.BOTTOM_CENTER,
-  timeout: 3000,
-});
+const router = createRouter({
+  history: createWebHistory(),
+  routes,
+})
 
-app.mount('#app');
+router.beforeEach((to, from, next) => {
+  isLoading.value = true
+  next()
+})
+
+router.afterEach(() => {
+  setTimeout(() => {
+    isLoading.value = false
+  }, 500)
+})
+
+const app = createApp(App)
+app.use(router)
+app.mount('#app')
